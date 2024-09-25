@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragment::header}">
+    <title>Detail</title>
+</head>
+<style>
+    /* Container Styles */
+    .product-detail-head {
+        width: 80%;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .product-detail-head .row {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -15px;
+    }
+
+    .product-detail-head .col-6 {
+        flex: 0 0 50%;
+        max-width: 50%;
+        padding: 15px;
+    }
+
+    .product-detail-head img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    /* Product Detail Styles */
+    .product-detail {
+        background: #f4f4f4;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-detail h2 {
+        margin-top: 0;
+    }
+
+    .product-detail h5 {
+        color: #d9534f; /* Bootstrap danger color */
+        font-size: 2rem;
+        margin: 10px 0;
+    }
+
+    .product-detail h4 {
+        margin-top: 20px;
+    }
+
+    .product-detail p {
+        margin: 10px 0;
+    }
+
+    .quantity {
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    .quantity button {
+        background: #007bff;
+        color: #fff;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        border-radius: 5px;
+        margin: 0 5px;
+    }
+
+    .quantity input {
+        width: 50px;
+        text-align: center;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 5px;
+    }
+
+    .quantity button:hover {
+        background: #0056b3;
+    }
+
+    .add-cart {
+        margin-top: 20px;
+        width: 100%;
+    }
+
+    .add-cart button {
+        width: 100%;
+        background: #ffffff;
+        color: #000;
+        font-weight: 700;
+        border: 1px solid red;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    .add-cart button:hover {
+        background: red;
+        color: #fff;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+        .product-detail-head .col-6 {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+
+        .product-detail {
+            text-align: center;
+        }
+
+        .add-cart {
+            text-align: center;
+        }
+    }
+
+</style>
+<body>
+
+<!-- Start Header/Navigation -->
+<div th:replace="~{fragment::nav}"></div>
+<!-- End Header/Navigation -->
+
+<!-- Start Hero Section -->
+<div class="hero">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-center">Shop detail</h1>
+            </div>
+            <!--Start search-->
+
+            <!--End search-->
+        </div>
+    </div>
+</div>
+<!-- End Hero Section -->
+
+<!--Start detail-->
+<div class="container product-detail-head">
+    <div class="row">
+        <div class="col-6">
+            <img th:src="@{'data:image/jpeg;base64,' + ${bookDetail.image}}" alt="Image">
+        </div>
+        <div class="col-6">
+            <form th:action="@{/addToCart}" method="post">
+                <div class="product-detail">
+                    <h2 th:text="${bookDetail.title}"></h2>
+                    <h5 class="text-danger fs-2" th:text="${bookDetail.costPrice + '$'}"></h5>
+                    <h4>Short description:</h4>
+                    <p th:text="${bookDetail.description}"></p>
+                    <div class="quantity">
+                        <button type="button" class="quantity-btn" id="decrease">-</button>
+                        <label for="quantity-input">
+                            <input type="number" name="quantity" id="quantity-input" value="1" min="1">
+                        </label>
+                        <button type="button" class="quantity-btn" id="increase">+</button>
+                    </div>
+                </div>
+                <div class="add-cart">
+                    <input type="hidden" th:value="${bookDetail.id}" name="id">
+                    <button type="submit" class="btn">Add to cart</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--End detail -->
+
+
+<!-- Start Footer Section -->
+<div th:replace="~{fragment::footer}"></div>
+<!-- End Footer Section -->
+
+<script src="/js/bootstrap.bundle.min.js"></script>
+<script src="/js/tiny-slider.js"></script>
+<script src="/js/flatpickr.min.js"></script>
+<script src="/js/aos.js"></script>
+<script src="/js/glightbox.min.js"></script>
+<script src="/js/navbar.js"></script>
+<script src="/js/counter.js"></script>
+<script src="/js/custom.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const increaseBtn = document.getElementById('increase');
+        const decreaseBtn = document.getElementById('decrease');
+        const quantityInput = document.getElementById('quantity-input');
+
+        increaseBtn.addEventListener('click', function() {
+            quantityInput.value = parseInt(quantityInput.value) + 1;
+        });
+
+        decreaseBtn.addEventListener('click', function() {
+            if (parseInt(quantityInput.value) > 1) {
+                quantityInput.value = parseInt(quantityInput.value) - 1;
+            }
+        });
+
+        quantityInput.addEventListener('input', function() {
+            if (quantityInput.value < 1) {
+                quantityInput.value = 1;
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

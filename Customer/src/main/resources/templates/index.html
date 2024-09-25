@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragment::header}">
+
+    <title></title></head>
+
+<body>
+
+<!-- Start Header/Navigation -->
+<div th:replace="~{fragment::nav}"></div>
+<!-- End Header/Navigation -->
+
+<!-- Start Carousel Section -->
+<div id="carouselExampleAutoplaying" class="carousel slide mt-1" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <div class="carousel-caption d-none d-md-block text-start w-50 ">
+                <h2 class="fs-1 text-black" style="text-transform: uppercase; font-weight: 600;">Cold-pressed marfa
+                    <br>
+                    raw denim
+                </h2>
+                <p class="fs-4 text-black">Microdosing craft beer master cleanse helvetica freegan, retro wolf sint
+                    pabst anim messenger bag
+                    ascot cold-pressed. Vape sartorial kickstarter..</p>
+                <a href="#" class="btn btn-warning" type="button">Shop now</a>
+            </div>
+            <img src="/images/hero_book1.jpg" class="d-block w-50 float-end " alt="...">
+        </div>
+        <div class="carousel-item">
+            <div class="carousel-caption d-none d-md-block text-start">
+                <h2 class="fs-1 text-black" style="text-transform: uppercase; font-weight: 600;"> In artisan lorem
+                    <br>
+                    hoodie rights
+                </h2>
+                <p class="fs-4 text-black">Everyday carry poutine chia est DSA mixtape jean shorts, sustainable
+                    gluten-free fingerstache laboris. Magna next level hell of slow-carb, same disrupt.</p>
+                <a href="#" class="btn btn-warning" type="button">Shop now</a>
+            </div>
+            <img src="/images/hero_book2.jpg" class="d-block w-50 float-end" alt="...">
+        </div>
+        <div class="carousel-item">
+            <div class="carousel-caption d-none d-md-block text-start">
+                <h2 class="fs-1 text-black" style="text-transform: uppercase; font-weight: 600;"> listicle nisi next
+                    <br>
+                    level cray Party
+                </h2>
+                <p class="fs-4 text-black">Vape sartorial kickstarter magna 90's, locavore fingerstache tattooed
+                    mumblecore humblebrag art party narwhal scenester. In artisan lorem hoodie bicycle rights four
+                    dollar toast.</p>
+                <a href="#" class="btn btn-warning" type="button">Shop now</a>
+            </div>
+            <img src="/images/hero_book3.jpg" class="d-block w-50 float-end " alt="...">
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying"
+            data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying"
+            data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+<!-- End Carousel Section -->
+
+<!-- Start Product Section -->
+<div class="product-section">
+    <div class="container">
+        <div class="col-md-12 mb-5">
+            <h2 class="mb-4 section-title">Best-Sellers.</h2>
+            <hr>
+            <h3 class="mb-4">of the <strong>Month</strong>.</h3>
+        </div>
+        <div class="row d-flex flex-wrap">
+            <!-- Start Product  -->
+            <div class="col-md-2" th:each="book : ${topBook}">
+                <div class="product-item">
+                    <img th:src="@{'data:image/jpeg;base64,' + ${book.image}}" class="img-fluid product-thumbnail"
+                         alt="Image"
+                         width="150">
+                    <h3 class="product-title" th:text="${book.title}"></h3><br>
+                    <p th:text="${book.category.name}"></p>
+                    <strong th:text="${book.costPrice} + '$'" class="product-price text-danger"></strong><br>
+                    <a th:href="@{/viewsDetail(bookId=${book.id})}" class="btn btn-primary">View detail</a>
+                </div>
+            </div>
+            <!-- End Product  -->
+
+        </div>
+    </div>
+</div>
+<!-- End Product Section -->
+
+<!-- Start Why Choose Us Section -->
+<div class="why-choose-section">
+    <div class="container">
+        <div class="row justify-content-between">
+            <!-- Start Category -->
+            <div class="col-lg-6">
+                <h2 class="mb-4 section-title">Categories</h2>
+                <hr>
+                <h3 class="mb-4">The most <strong>Popular</strong>.</h3>
+                <div class="row categoryList">
+                    <!-- Start category -->
+                    <form th:action="@{/findByCategoryNameFromHome}" method="post" class="col-md-4 category"
+                          th:each="category : ${categoryList}">
+                        <input type="hidden" name="categoryName" th:value="${category.name}"/>
+                        <button class="btn" type="submit" th:text="${category.name}"></button>
+                    </form>
+                    <!-- End category -->
+                </div>
+            </div>
+            <!-- End Category -->
+            <div class="col-lg-5">
+                <div class="img-wrap">
+                    <img src="/imgSlideBook/image-2.jpg" alt="Image" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--Start Just Arrived-->
+<div class="product-section">
+    <div class="container">
+        <div class="col-md-12. mb-1">
+            <h2 class="mb-4 section-title">Just Arrived.</h2>
+            <hr>
+            <h3 class="mb-4">In the <strong>Store</strong>.</h3>
+        </div>
+        <div class="col-md-12">
+            <div class="row">
+                <!-- Start Product  -->
+                <div class="col-md-3" th:each="book : ${bookList}">
+                    <div class="product-item">
+                        <img th:src="@{'data:image/jpeg;base64,' + ${book.image}}" class="img-fluid product-thumbnail"
+                             alt="Image"
+                             width="150">
+                        <h3 class="product-title" th:text="${book.title}"></h3><br>
+                        <p th:text="${book.category.name}"></p>
+                        <strong th:text="${book.costPrice} + '$'" class="product-price text-danger"></strong><br>
+                        <a th:href="@{/viewsDetail(bookId=${book.id})}" class="btn btn-primary">View detail</a>
+                    </div>
+                </div>
+                <!-- End Product  -->
+
+                <!-- Start Pagination -->
+                <div class="d-flex justify-content-center">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <!-- First Page -->
+                            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{'/index?page=0'}">First</a>
+                            </li>
+                            <!-- Previous Page -->
+                            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{'/index?page=' + ${currentPage - 1}}">Previous</a>
+
+                            </li>
+                            <!-- Page Numbers -->
+                            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                                th:classappend="${i == currentPage} ? 'active'">
+                                <a class="page-link"
+                                   th:href="@{'/index?page=' + ${i}}" th:text="${i + 1}">1</a>
+
+                            </li>
+                            <!-- Next Page -->
+                            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{'/index?page=' + ${currentPage + 1}}">Next</a>
+
+                            </li>
+                            <!-- Last Page -->
+                            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                                <a class="page-link" th:if="${keyword == null && categoryName == null}"
+                                   th:href="@{'/index?page=' + ${totalPages - 1}}">Last</a>
+
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <!-- End Pagination -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--End Just Arrived-->
+
+<!-- Start Footer Section -->
+<div th:replace="~{fragment::footer}"></div>
+<!-- End Footer Section -->
+
+<div th:replace="~{fragment::script}"></div>
+
+</body>
+
+</html>

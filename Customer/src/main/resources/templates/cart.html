@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragment::header}">
+    <title>Furni Free Bootstrap 5 Template for Furniture and Interior Design Websites by Untree.co </title>
+</head>
+<body>
+
+<!-- Start Header/Navigation -->
+<div th:replace="~{fragment::nav}"></div>
+<!-- End Header/Navigation -->
+
+<!-- Start Hero Section -->
+<div class="hero">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-lg-5">
+                <div class="intro-excerpt">
+                    <h1>Cart</h1>
+                </div>
+            </div>
+            <div class="col-lg-7">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Hero Section -->
+
+<!-- Start cart -->
+<!-- Start cart -->
+<div class="untree_co-section before-footer-section">
+    <div class="container">
+        <div class="row mb-5">
+            <form th:action="@{/updateCart}" class="col-md-12" method="post">
+                <div class="site-blocks-table">
+                    <p class="text-center">
+                        <i class="text-info font-weight-bold text-center" th:text="${check}"></i>
+                        </p>
+                    <table class="table" th:if="${grandTotal}">
+                        <thead>
+                        <tr>
+                            <th class="product-thumbnail">Image</th>
+                            <th class="product-name">Product</th>
+                            <th class="product-price">Price</th>
+                            <th class="product-quantity">Quantity</th>
+                            <th class="product-total">Total</th>
+                            <th class="product-remove">Remove</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="cartItem : ${shoppingCart.cartItems}">
+                            <!-- Image -->
+                            <td class="product-thumbnail">
+                                <img th:src="@{'data:image/jpeg;base64,' + ${cartItem.book.image}}" alt="Image" class="img-fluid">
+                                <input type="hidden" name="id" th:value="${cartItem.book.id}">
+                            </td>
+                            <!-- Title -->
+                            <td class="product-name">
+                                <h2 th:text="${cartItem.book.title}" class="h5 text-black"></h2>
+                            </td>
+                            <!-- Price -->
+                            <td>
+                                <p th:text="${cartItem.unitPrice}"></p>
+                            </td>
+                            <!-- Quantity -->
+                            <td>
+                                <div class="input-group mb-3 align-items-center quantity-container d-flex" style="max-width: 150px">
+                                    <button type="button" class="btn quantity-btn" id="decrease" style="width: 50px">-</button>
+                                    <label for="quantity-input" class="flex-grow-1">
+                                        <input style="width: 50px" type="number" class="form-control" name="quantity" th:value="${cartItem.quantity}" id="quantity-input" value="1" min="0">
+                                    </label>
+                                    <button type="button" class="btn quantity-btn" id="increase" style="width: 50px">+</button>
+                                </div>
+                            </td>
+
+                            <!-- Total Price -->
+                            <td>
+                                <p th:text="${cartItem.unitPrice * cartItem.quantity} + '$'"></p>
+                            </td>
+                            <!-- Remove -->
+                            <td>
+                                <form th:action="@{/deleteItem}" method="post">
+                                    <input type="hidden" name="bookId" th:value="${cartItem.book.id}">
+                                    <button type="submit" class="btn btn-black btn-sm">X</button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-flex">
+                    <div class="col-md-6">
+                        <div class="row mb-5">
+                            <!-- Update Cart -->
+                            <div class="col-md-6 mb-3 mb-md-0">
+                                <button type="submit" class="btn btn-black btn-sm btn-block">Update Cart</button>
+                            </div>
+                            <div class="col-md-6">
+                                <a th:href="@{/shop}" type="button" class="btn btn-outline-black btn-sm btn-block">Continue Shopping</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Start Cart Total -->
+                    <div class="col-md-6 pl-5">
+                        <div class="row justify-content-end">
+                            <div class="col-md-7">
+                                <form th:action="@{/checkout}">
+                                    <div class="row">
+                                        <div class="col-md-12 text-right border-bottom mb-5">
+                                            <h3 class="text-black h4 text-uppercase">Cart Totals</h3>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <span class="text-black">Subtotal</span>
+                                        </div>
+                                        <div class="col-md-6 text-right">
+                                            <strong class="text-black" th:text="${grandTotal} + '$'"></strong>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-5">
+                                        <div class="col-md-6">
+                                            <!-- Grand Total -->
+                                            <span class="text-black">Total</span>
+                                        </div>
+                                        <div class="col-md-6 text-right">
+                                            <strong class="text-black" th:text="${grandTotal + '$'}"></strong>
+                                        </div>
+                                    </div>
+                                    <!-- Checkout -->
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <a th:href="@{/checkout}" type="submit" class="btn btn-black btn-lg py-3 btn-block">Proceed To Checkout</a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Cart Total -->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- End cart -->
+
+<!-- End cart -->
+
+<!-- Start Footer Section -->
+<div th:replace="~{fragment::footer}"></div>
+<!-- End Footer Section -->
+
+<div th:replace="~{fragment::script}"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const increaseBtns = document.querySelectorAll('.quantity-container #increase');
+        const decreaseBtns = document.querySelectorAll('.quantity-container #decrease');
+        const quantityInputs = document.querySelectorAll('.quantity-container #quantity-input');
+
+        // Xử lý cho từng sản phẩm trong danh sách
+        increaseBtns.forEach((increaseBtn, index) => {
+            increaseBtn.addEventListener('click', function() {
+                quantityInputs[index].value = parseInt(quantityInputs[index].value) + 1;
+            });
+        });
+
+        decreaseBtns.forEach((decreaseBtn, index) => {
+            decreaseBtn.addEventListener('click', function() {
+                if (parseInt(quantityInputs[index].value) > 1) {
+                    quantityInputs[index].value = parseInt(quantityInputs[index].value) - 1;
+                }
+            });
+        });
+
+        quantityInputs.forEach((input) => {
+            input.addEventListener('input', function() {
+                if (input.value < 1) {
+                    input.value = 1;
+                }
+            });
+        });
+    });
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragment::header}">
+    <title>Shop</title>
+
+</head>
+
+<body>
+<!-- Start Header/Navigation -->
+<div th:replace="~{fragment::nav}"></div>
+<!-- End Header/Navigation -->
+
+<!-- Start Hero Section -->
+<div class="hero">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-lg-5">
+                <div class="intro-excerpt">
+                    <h1>My Account</h1>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <!-- Leave this column empty for potential future content -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Hero Section -->
+
+<div class="container mt-5" style="margin-bottom: 200px">
+    <div class="row">
+        <!-- Information customer -->
+        <div class="col-md-4">
+            <!-- Img customer -->
+            <div class="avatar-customer">
+                <img src="/imgSlideBook/wallhaven-0je77w.jpg" class="rounded-5" alt="Customer Avatar" width="200">
+            </div>
+            <form th:action="@{/updateProfile}" method="post" th:object="${customerDto}">
+                <div class="form-group">
+                    <label for="firstName">First name:</label>
+                    <input th:value="${customer.firstName}" th:text="*{firstName}" type="text" class="form-control"
+                           id="firstName" name="firstName">
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last name:</label>
+                    <input th:value="${customer.lastName}" th:text="*{lastName}" type="text" class="form-control"
+                           id="lastName" name="lastName">
+                </div>
+                <div class="form-group">
+                    <label for="phoneNumber">Phone number:</label>
+                    <input th:value="${customer.phoneNumber}" th:text="*{phoneNumber}" type="text" class="form-control"
+                           id="phoneNumber" name="phoneNumber">
+                </div>
+                <div class="form-group">
+                    <label for="country">Country:</label>
+                    <input th:value="${customer.city.country.name}" th:text="*{country}" type="text"
+                           class="form-control" id="country" name="country">
+                </div>
+                <div class="form-group">
+                    <label for="city">City:</label>
+                    <input th:value="${customer.city.name}" th:text="*{city}" type="text" class="form-control" id="city"
+                           name="city">
+                </div>
+                <div class="form-group">
+                    <label for="address">Address:</label>
+                    <input th:value="${customer.address}" th:text="*{address}" type="text" class="form-control"
+                           id="address" name="address">
+                </div>
+                <div class="form-group mt-5">
+                    <button type="submit" class="btn btn-outline-primary" style="width: 100%;">Update Profile</button>
+                    <hr>
+                    <a th:href="@{/changePassword}" class="btn" type="button" style="width: 100%;">Change Password</a>
+                </div>
+            </form>
+        </div>
+
+
+        <!-- Order list -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Order List</h2>
+                </div>
+                <div class="card-body">
+                    <p th:text="${error}" class="text-danger"></p>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>Order Date</th>
+                                <th>Total Items</th>
+                                <th>Total Price</th>
+                                <th>Tax</th>
+                                <th>Grand Total</th>
+                                <th>Status</th>
+                                <th>Delivery Date</th>
+                                <!--<th>Action</th>-->
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="order, iter : ${orderList}">
+                                <td th:text="${iter.count}"></td>
+                                <td th:text="${#dates.format(order.orderDate, 'yyyy-MM-dd')}"></td>
+                                <td th:text="${order.quantity}"></td>
+                                <td th:text="${order.totalPrice} + '$'"></td>
+                                <td th:text="${order.tax} + '%'"></td>
+                                <td th:text="${order.totalPrice * 1.02} + '$'"></td>
+                                <td th:text="${order.accept ? 'Paid' : 'Unpaid'}"></td>
+                                <td th:text="${order.deliveryDate == null ? 'Waiting' : #dates.format(order.deliveryDate, 'yyyy-MM-dd')}"></td>
+                                <!--<td>-->
+                                <!--<a class="btn btn-warning" th:href="@{/orderDetail(id=${order.id})}">Detail</a>-->
+                                <!--</td>-->
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Start Footer Section -->
+<div th:replace="~{fragment::footer}"></div>
+<!-- End Footer Section -->
+
+
+</body>
+
+</html>

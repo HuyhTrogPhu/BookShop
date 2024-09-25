@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.thymeleaf.org">
+<head th:replace="fragment :: header">
+    <title>Order Detail</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body id="page-top">
+
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <div th:replace="fragment::sidebar"></div>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <div th:replace="~{fragment::topbar}"></div>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <form th:action="@{/updateOrder/{id}(id=${order.id})}" method="post">
+                <div class="container-fluid pr-5 pl-5">
+                    <div class="row">
+                        <!-- Information customer -->
+                        <div class="col-md-6">
+                            <h1 class="fs-5">Customer Details:</h1>
+                            <ul>
+                                <li th:text="'Name customer: ' + ${order.customer.firstName} + ' ' + ${order.customer.lastName}"></li>
+                                <li th:text="'Email address: ' + ${order.customer.username}"></li>
+                                <li th:text="'Phone number: ' +${order.customer.phoneNumber}"></li>
+                                <li th:text="'Address: ' + ${order.customer.address} + '-' + ${order.customer.city.name} + '-' + ${order.customer.city.country.name}"></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h1 class="fs-5">Order Details:</h1>
+                            <ul>
+                                <li th:text="'Order ID: ' + ${order.id}"></li>
+                                <li th:text="'Create Order: ' + ${order.orderDate}"></li>
+                                <li th:text="'Status: ' + (${order.accept} ? 'Paid' : ${order.accept}) "
+                                    class="alert-success">
+                                </li>
+                                <li th:text="'Delivery date: ' + (${order.deliveryDate == null} ? 'Waiting' : ${order.deliveryDate})"
+                                    class="alert-danger">
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Order detail -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1 class="fs-5">Order Items</h1>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Item</th>
+                                        <th scope="col">Book Title</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Total</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="item, iterStat : ${orderDetailList}">
+                                        <th th:text="${iterStat.count}"></th>
+                                        <td th:text="${item.book.title}"></td>
+                                        <td th:text="${item.quantity}"></td>
+                                        <td th:text="${item.book.costPrice} + ' $'"></td>
+                                        <td th:text="${item.quantity * item.book.costPrice} + ' $'"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Payment method and totals -->
+                    <div class="row mb-5">
+                        <div class="col-md-6">
+                            <h1 class="fs-5">Payment Method:</h1>
+                            <p th:text="${order.paymentMethod}"></p>
+                            <h1 class="fs-5">Notes:</h1>
+                            <p th:text="${order.orderStatus}"></p>
+                        </div>
+                        <div class="col-md-6">
+                            <h1 class="fs-5">Order Summary</h1>
+                            <ul>
+                                <li th:text="'Total: ' + ${order.totalPrice} + ' $'"></li>
+                                <li th:text="'Tax: ' + ${order.tax} + ' %'"></li>
+                                <li th:text="'Sub Total: ' + ${order.totalPrice * 1.02} + ' $'"></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-outline-success col-12 mt-5">Update</button>
+                </div>
+                <!-- /.container-fluid -->
+            </form>
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <div th:replace="fragment::footer"></div>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a th:replace="fragment::scroll" class="scroll-to-top rounded" href="#page-top"></a>
+
+<!-- Logout Modal-->
+<div th:replace="fragment::layoutModal"></div>
+
+<div th:replace="fragment::script"></div>
+
+</body>
+</html>

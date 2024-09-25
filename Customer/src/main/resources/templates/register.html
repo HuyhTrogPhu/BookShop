@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title> Stylish Login Form Design | Smarteyeapps.com</title>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="/images/fav.png">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/styleLogin.css">
+</head>
+<body>
+<div class="container-fluid bg-login">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9 col-md-12 login-card">
+                <div class="row">
+                    <div class="col-md-5 detail-part">
+                        <h1>Awesome Login Page Design</h1>
+                        <p>Please use your credentials to login.
+                            If you are not a member, please register. </p>
+                    </div>
+                    <div class="col-md-7 logn-part">
+                        <div class="row">
+                            <div class="col-lg-10 col-md-12 mx-auto">
+
+                                <div class="form-cover" style="width: 100%;">
+                                    <form th:action="@{/do-register}" th:object="${customerDto}" method="post">
+                                        <h1 class="mb-5 text-center">Register</h1>
+                                        <div th:if="${success}">
+                                            <div class="alert alert-success" th:text="${success}"></div>
+                                        </div>
+                                        <div th:if="${error}">
+                                            <div class="alert alert-danger" th:text="${error}"></div>
+                                        </div>
+                                        <div class="mb-3" style="width: 100%;">
+                                            <input th:field="*{firstName}" type="text" class="form-control"
+                                                   style="width: 100% !important;" placeholder="First name"
+                                                   name="firstName"/>
+                                            <p th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></p>
+                                        </div>
+                                        <div class="mb-3" style="width: 100%;">
+                                            <input type="text" class="form-control" style="width: 100%;" placeholder="Last Name" name="lastname"
+                                                   th:field="*{lastName}">
+                                            <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
+                                        </div>
+                                        <div class="mb-3" style="width: 100%;" >
+                                            <input type="email" class="form-control" style="width: 100%;" placeholder="Email" name="username"
+                                                   th:field="*{username}">
+                                        </div>
+                                        <div class="mb-3" style="width: 100%;">
+                                            <input type="password" class="form-control" style="width: 100%;" placeholder="Password" name="password"
+                                                   th:field="*{password}">
+                                            <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                                        </div>
+                                        <div class="mb-3" style="width: 100%;">
+                                            <input type="password" class="form-control" style="width: 100%;" placeholder="Verify password" name="confirmPassword"
+                                                   th:field="*{confirmPassword}">
+                                        </div>
+                                        <div class="mb-3" style="width: 100%;">
+                                            <button type="submit" class="btn btn-outline-warning">Sign Up</button>
+                                            <div class="text-center mt-5">
+                                                <a class="" th:href="@{/login}" >Already have an account? Login!</a>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script src="/js/jquery-3.2.1.min.js"></script>
+<script src="/js/popper.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+</html>

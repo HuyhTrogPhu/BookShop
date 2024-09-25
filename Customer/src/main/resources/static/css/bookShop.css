@@ -1,0 +1,15 @@
+ul, li {
+    list-style: none;
+    padding: 10px 20px;
+}
+
+.category a {
+    font-size: 20px;
+    font-weight: 600;
+    text-decoration: none ;
+}
+
+.categoryList .category{
+    margin-top: 100px;
+}
+

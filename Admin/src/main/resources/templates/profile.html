@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.thymeleaf.org">
+
+<head th:replace="fragment :: header">
+    <title>Admin Info</title>
+    <style>
+        .info {
+            margin-top: 20px;
+        }
+
+        .info .col-4 img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .info h3 {
+            margin-bottom: 15px;
+        }
+
+        .info span {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <div th:replace="fragment::sidebar"></div>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <div th:replace="fragment::topbar"></div>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container info row">
+                <div class="col-4">
+                    <img src="path/to/image.jpg" alt="Admin Image">
+                </div>
+                <!-- Information admin -->
+                <div class="col-8">
+                    <h3>First name: <span th:text="${admin.firstName}"></span></h3>
+                    <h3>Last name: <span th:text="${admin.lastName}"></span></h3>
+                    <h3>Email: <span th:text="${admin.userName}"></span></h3>
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <div th:replace="fragment::footer"></div>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a th:replace="fragment::scroll" class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div th:replace="fragment::layoutModal"></div>
+
+<div th:replace="fragment::script"></div>
+<!-- Page level plugins -->
+<script th:src="@{/vendor/chart.js/Chart.min.js}"></script>
+
+<!-- Page level custom scripts -->
+<script th:src="@{/js/demo/chart-area-demo.js}"></script>
+<script th:src="@{/js/demo/chart-pie-demo.js}"></script>
+
+</body>
+
+</html>

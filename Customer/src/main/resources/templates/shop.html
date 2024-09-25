@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragment::header}">
+    <title>Shop</title>
+</head>
+
+<body>
+<!-- Start Header/Navigation -->
+<div th:replace="~{fragment::nav}"></div>
+<!-- End Header/Navigation -->
+
+<!-- Start Hero Section -->
+<div class="hero">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-center">Shop</h1>
+            </div>
+            <!--Start search-->
+            <div class="col-12">
+                <form th:action="@{/searchByKeyword}" style="display: flex;" method="post">
+                    <div class="col-11" style="flex-grow: 1; margin-right: 20px;">
+                        <input name="keyword" type="text" class="form-control" placeholder="Search by keyword...">
+                    </div>
+                    <div class="col-1">
+                        <button class="btn" type="submit" style="width: 100%;">Search</button>
+                    </div>
+                </form>
+            </div>
+            <!--End search-->
+        </div>
+    </div>
+</div>
+<!-- End Hero Section -->
+
+<!--Start sort-->
+<div class="container">
+    <div class="row text-center">
+        <!--Start sort by Category-->
+        <div class="col-3 dropdown mt-5" style="border: 1px solid #000; padding: 10px 0">
+            <a style="text-decoration: none" class="dropdown-toggle fs-5" href="#" role="button"
+               data-bs-toggle="dropdown" aria-expanded="false">
+                Category
+            </a>
+            <ul class="dropdown-menu">
+                <li th:each="category : ${categoryList}">
+                    <form th:action="@{/findByCategoryName}" method="post">
+                        <input type="hidden" name="categoryName" th:value="${category.name}"/>
+                        <button type="submit" class="dropdown-item" th:text="${category.name}"></button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+        <!--End sort by category-->
+
+        <!--Start sort author-->
+        <div class="col-3 dropdown mt-5" style="border: 1px solid #000; padding: 10px 0">
+            <a style="text-decoration: none" class="dropdown-toggle fs-5" href="#" role="button"
+               data-bs-toggle="dropdown" aria-expanded="false">
+                Author
+            </a>
+            <ul class="dropdown-menu">
+                <li th:each="author : ${authorBook}">
+                    <form th:action="@{/findByAuthor}" method="post">
+                        <input type="hidden" name="author" th:value="${author}">
+                        <button type="submit" class="dropdown-item" th:text="${author}"></button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+        <!--End sort author-->
+
+        <!--Start sort sale off-->
+        <div class="col-3 dropdown mt-5" style="border: 1px solid #000; padding: 10px 0">
+            <a style="text-decoration: none" class="fs-5 dropdown-toggle" href="#" role="button"
+               data-bs-toggle="dropdown" aria-expanded="false">
+                Sale off
+            </a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Updating</a></li>
+            </ul>
+        </div>
+        <!--End sort sale off-->
+
+        <!--Sort by-->
+        <div class="col-3 dropdown mt-5" style="border: 1px solid #000; padding: 10px 0">
+            <a style="text-decoration: none" class="fs-5 dropdown-toggle" href="#" role="button"
+               data-bs-toggle="dropdown" aria-expanded="false">
+                Sorted by
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a class="dropdown-item" th:href="@{/shop}">Default</a>
+                </li>
+                <li>
+                    <form th:action="@{/sortFromAToZ}" method="post">
+                        <button type="submit" class="dropdown-item">A -> Z</button>
+                    </form>
+                </li>
+                <li>
+                    <form th:action="@{/sortFromZToA}" method="post">
+                        <button type="submit" class="dropdown-item">Z -> A</button>
+                    </form>
+                </li>
+                <li>
+                    <form th:action="@{/sortLowToHigh}" method="post">
+                        <button type="submit" class="dropdown-item">Low to high</button>
+                    </form>
+                </li>
+                <li>
+                    <form th:action="@{/sortHighToLow}" method="post">
+                        <button type="submit" class="dropdown-item">High to low</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+        <!--Sort by-->
+    </div>
+</div>
+<!--End sort-->
+
+<div th:if="${message}">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 th:text="${message}" class="text-center text-danger"></h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="untree_co-section product-section before-footer-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row container">
+                    <!-- Start Column 1 -->
+                    <div th:each="book : ${bookList}" class="col-lg-2 col-md-3 col-sm-6 mb-5 m-3">
+                        <div class="product-item">
+                            <img th:src="@{'data:image/jpeg;base64,' + ${book.image}}"
+                                 class="img-fluid product-thumbnail" alt="Img">
+                            <strong><p th:text="${book.title}"
+                                       class="product-title fs-5 text-primary font-weight-bold"></p></strong>
+                            <p th:text="'Category: ' + ${book.category.name}"></p>
+                            <p th:text="'Author: ' + ${book.author}"></p>
+                            <strong th:text="${book.costPrice} + '$'" class="product-price text-danger"></strong><br>
+                            <a th:href="@{/viewsDetail(bookId=${book.id})}" class="btn btn-primary">View detail</a>
+                        </div>
+                    </div>
+                    <!-- End Column 1 -->
+                </div>
+                <!-- Start Pagination -->
+                <div class="d-flex justify-content-center">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <!-- First Page -->
+                            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                <a class="page-link"
+                                   th:if="${keyword == null && categoryName == null && author == null && sort == null}"
+                                   th:href="@{'/shop?page=0'}">First</a>
+
+                                <a class="page-link" th:if="${sort != null}"
+                                   th:href="@{'/sortFromAToZ?page=0'}">First</a>
+
+                                <a class="page-link" th:if="${keyword != null}"
+                                   th:href="@{'/searchByKeyword?keyword=' + ${keyword} + '&page=0'}">First</a>
+
+                                <a class="page-link" th:if="${categoryName != null}"
+                                   th:href="@{'/findByCategoryName?categoryName=' + ${categoryName} + '&page=0'}">First</a>
+                                <a class="page-link" th:if="${author != null}"
+                                   th:href="@{'/findByAuthor?author=' + ${author} + '&page=0'}">First</a>
+                            </li>
+                            <!-- Previous Page -->
+                            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                <a class="page-link"
+                                   th:if="${keyword == null && categoryName == null && author == null && sort == null}"
+                                   th:href="@{'/shop?page=' + ${currentPage - 1}}">Previous</a>
+
+                                <a class="page-link" th:if="${sort != null}"
+                                   th:href="@{'/sortFromAToZ?page=' + ${currentPage - 1}}">Previous</a>
+
+                                <a class="page-link" th:if="${keyword != null}"
+                                   th:href="@{'/searchByKeyword?keyword=' + ${keyword} + '&page=' + ${currentPage - 1}}">Previous</a>
+
+                                <a class="page-link" th:if="${categoryName != null}"
+                                   th:href="@{'/findByCategoryName?categoryName=' + ${categoryName} + '&page=' + ${currentPage - 1}}">Previous</a>
+                                <a class="page-link" th:if="${author != null}"
+                                   th:href="@{'/findByAuthor?author=' + ${author} + '&page=' + ${currentPage - 1}}">Previous</a>
+                            </li>
+                            <!-- Page Numbers -->
+                            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                                th:classappend="${i == currentPage} ? 'active'">
+                                <a class="page-link"
+                                   th:if="${keyword == null && categoryName == null && author == null && sort == null}"
+                                   th:href="@{'/shop?page=' + ${i}}" th:text="${i + 1}">1</a>
+
+                                <a class="page-link" th:if="${sort != null}"
+                                   th:href="@{'/sortFromAToZ?page=' + ${i}}" th:text="${i + 1}">1</a>
+
+                                <a class="page-link" th:if="${keyword != null}"
+                                   th:href="@{'/searchByKeyword?keyword=' + ${keyword} + '&page=' + ${i}}"
+                                   th:text="${i + 1}">1</a>
+
+                                <a class="page-link" th:if="${categoryName != null}"
+                                   th:href="@{'/findByCategoryName?categoryName=' + ${categoryName} + '&page=' + ${i}}"
+                                   th:text="${i + 1}">1</a>
+                                <a class="page-link" th:if="${author != null}"
+                                   th:href="@{'/findByAuthor?author=' + ${author} + '&page=' + ${i}}"
+                                   th:text="${i + 1}">1</a>
+                            </li>
+                            <!-- Next Page -->
+                            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                                <a class="page-link"
+                                   th:if="${keyword == null && categoryName == null && author == null && sort == null}"
+                                   th:href="@{'/shop?page=' + ${currentPage + 1}}">Next</a>
+
+                                <a class="page-link" th:if="${sort != null}"
+                                   th:href="@{'/sortFromAToZ?page=' ${currentPage + 1}}">Next</a>
+
+                                <a class="page-link" th:if="${keyword != null}"
+                                   th:href="@{'/searchByKeyword?keyword=' + ${keyword} + '&page=' + ${currentPage + 1}}">Next</a>
+
+                                <a class="page-link" th:if="${categoryName != null}"
+                                   th:href="@{'/findByCategoryName?categoryName=' + ${categoryName} + '&page=' + ${currentPage + 1}}">Next</a>
+                                <a class="page-link" th:if="${author != null}"
+                                   th:href="@{'/findByAuthor?author=' + ${author} + '&page=' + ${currentPage + 1}}">Next</a>
+                            </li>
+                            <!-- Last Page -->
+                            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                                <a class="page-link"
+                                   th:if="${keyword == null && categoryName == null && author == null && sort == null}"
+                                   th:href="@{'/shop?page=' + ${totalPages - 1}}">Last</a>
+
+                                <a class="page-link" th:if="${sort != null}"
+                                   th:href="@{'/sortFromAToZ?page=' + ${totalPages -1}}">Last</a>
+
+                                <a class="page-link" th:if="${keyword != null}"
+                                   th:href="@{'/searchByKeyword?keyword=' + ${keyword} + '&page=' + ${totalPages - 1}}">Last</a>
+
+                                <a class="page-link" th:if="${categoryName != null}"
+                                   th:href="@{'/findByCategoryName?categoryName=' + ${categoryName} + '&page=' + ${totalPages - 1}}">Last</a>
+                                <a class="page-link" th:if="${author != null}"
+                                   th:href="@{'/findByAuthor?author=' + ${author} + '&page=' + ${totalPages -1} }">Last</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <!-- End Pagination -->
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Start Footer Section -->
+<div th:replace="~{fragment::footer}"></div>
+<!-- End Footer Section -->
+
+<script src="/js/bootstrap.bundle.min.js"></script>
+<script src="/js/tiny-slider.js"></script>
+<script src="/js/flatpickr.min.js"></script>
+<script src="/js/aos.js"></script>
+<script src="/js/glightbox.min.js"></script>
+<script src="/js/navbar.js"></script>
+<script src="/js/counter.js"></script>
+<script src="/js/custom.js"></script>
+</body>
+</html>

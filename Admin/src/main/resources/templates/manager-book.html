@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.thymeleaf.org">
+
+<head th:replace="~{fragment::header}">
+    <title>Manager Book</title>
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <div th:replace="~{fragment::sidebar}"></div>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <div th:replace="~{fragment::topbar}"></div>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <!-- Start search book -->
+                <div class="col-12 mb-5">
+                    <form th:action="@{/searchByKeywordInManager}" style="display: flex;" method="post">
+                        <div class="col-11" style="flex-grow: 1; margin-right: 20px;">
+                            <input name="keyword" type="text" class="form-control" placeholder="Search by keyword...">
+                        </div>
+                        <div class="col-1">
+                            <button class="btn btn-outline-primary" type="submit" style="width: 100%;">Search</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- End search book -->
+
+                <h1 class="fs-5 text-center mb-2">Manager Book</h1>
+                <div class="container row">
+                    <!-- Start add book modal -->
+                    <button type="button" class="btn btn-primary col-md-2" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal">
+                        Add new book
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                         aria-hidden="true">
+                        <form action="/addBook" th:object="${bookDto}" method="post" enctype="multipart/form-data">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Add new book</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <div class="mb-3">
+                                            <label for="name" class="col-form-label">Book name:</label>
+                                            <input th:field="${bookDto.title}" type="text" class="form-control"
+                                                   id="name">
+                                            <p th:if="${#fields.hasErrors('title')}" th:errorclass="text-danger"
+                                               th:errors="${bookDto.title}"></p>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="author" class="col-form-label">Author:</label>
+                                            <input th:field="${bookDto.author}" type="text" class="form-control"
+                                                   id="author">
+                                            <p th:if="${#fields.hasErrors('author')}" th:errorclass="text-danger"
+                                               th:errors="${bookDto.author}"></p>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="categories">Book category:</label>
+                                            <select th:field="${bookDto.category.id}" name="categories" id="categories"
+                                                    class="form-control">
+                                                <option th:value="null">Select</option>
+                                                <option th:each="category : ${categories}" th:value="${category.id}"
+                                                        th:text="${category.name}"></option>
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="description">Description:</label>
+                                            <textarea th:field="${bookDto.description}" class="form-control"
+                                                      name="description" id="description" cols="30" rows="5"></textarea>
+                                            <p th:if="${#fields.hasErrors('description')}" th:errorclass="text-danger"
+                                               th:errors="${bookDto.description}"></p>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="costPrice">Price:</label>
+                                            <input th:field="${bookDto.costPrice}" type="number" id="costPrice"
+                                                   class="form-control">
+                                            <p th:if="${#fields.hasErrors('costPrice')}" th:errorclass="text-danger"
+                                               th:errors="${bookDto.costPrice}"></p>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="quantity">Quantity:</label>
+                                            <input th:field="${bookDto.currentQuantity}" type="text" id="quantity"
+                                                   class="form-control">
+                                            <p th:if="${#fields.hasErrors('currentQuantity')}"
+                                               th:errorclass="text-danger" th:errors="${bookDto.currentQuantity}"></p>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="image">Select img:</label>
+                                            <input name="imageBook" type="file" id="image" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                            Close
+                                        </button>
+                                        <button type="submit" class="btn btn-outline-primary">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- End add book modal -->
+
+                    <div th:if="${success}" class="text-center alert-success">
+                        <p class="fs-4 font-weight-bold" th:text="${success}"></p>
+                    </div>
+                    <div th:if="${error}" class="text-center alert-danger">
+                        <p class="fs-4 font-weight-bold" th:text="${error}"></p>
+                    </div>
+                    <div th:if="${size < 0}">
+                        <p class="font-weight-bold">No book in shop</p>
+                    </div>
+                    <table class="table col-md-12">
+                        <thead>
+                        <tr>
+                            <th class="scope">#</th>
+                            <th class="scope">Book ID</th>
+                            <th class="scope">Title</th>
+                            <th class="scope">Author</th>
+                            <th class="scope">Category</th>
+                            <th class="scope">Cost Price</th>
+                            <th class="scope">Current Quantity</th>
+                            <th class="scope">Image</th>
+                            <th class="scope">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="book, count : ${books}">
+                            <td th:text="${count.count}"></td>
+                            <td th:text="${book.id}"></td>
+                            <td th:text="${book.title}"></td>
+                            <td th:text="${book.author}"></td>
+                            <td th:text="${book.category.name}"></td>
+                            <td th:text="${book.costPrice + ' $'}"></td>
+                            <td th:text="${book.currentQuantity}"></td>
+                            <td>
+                                <img th:src="@{'data:image/jpeg;base64,' + ${book.image}}" alt="Book not image"
+                                     width="100">
+                            </td>
+                            <td>
+                                <a class="btn btn-warning" th:href="@{/editBook(bookId=${book.id})}">Edit</a>
+                                <a class="btn btn-danger" th:href="@{/removeBook(bookId=${book.id})}"
+                                   onclick="return confirm('Are your sure delete book?')">Remove</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Start Pagination -->
+                    <div class="d-flex justify-content-center">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                <!-- First Page -->
+                                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                    <a class="page-link"
+                                       th:if="${keyword == null }"
+                                       th:href="@{'/manager-books?page=0'}">First</a>
+
+                                    <a class="page-link" th:if="${keyword != null}"
+                                       th:href="@{'/searchByKeyword?keyword=' + ${keyword} + '&page=0'}">First</a>
+                                </li>
+                                <!-- Previous Page -->
+                                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                    <a class="page-link"
+                                       th:if="${keyword == null }"
+                                       th:href="@{'/manager-books?page=' + ${currentPage - 1}}">Previous</a>
+
+                                    <a class="page-link" th:if="${keyword != null}"
+                                       th:href="@{'/searchByKeyword?keyword=' + ${keyword} + '&page=' + ${currentPage - 1}}">Previous</a>
+                                </li>
+                                <!-- Page Numbers -->
+                                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                                    th:classappend="${i == currentPage} ? 'active'">
+                                    <a class="page-link"
+                                       th:if="${keyword == null }"
+                                       th:href="@{'/manager-books?page=' + ${i}}" th:text="${i + 1}">1</a>
+
+                                    <a class="page-link" th:if="${keyword != null}"
+                                       th:href="@{'/searchByKeyword?keyword=' + ${keyword} + '&page=' + ${i}}"
+                                       th:text="${i + 1}">1</a>
+                                </li>
+                                <!-- Next Page -->
+                                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                                    <a class="page-link"
+                                       th:if="${keyword == null }"
+                                       th:href="@{'/manager-books?page=' + ${currentPage + 1}}">Next</a>
+
+                                    <a class="page-link" th:if="${keyword != null}"
+                                       th:href="@{'/searchByKeyword?keyword=' + ${keyword} + '&page=' + ${currentPage + 1}}">Next</a>
+                                </li>
+                                <!-- Last Page -->
+                                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                                    <a class="page-link"
+                                       th:if="${keyword == null }"
+                                       th:href="@{'/manager-books?page=' + ${totalPages - 1}}">Last</a>
+
+                                    <a class="page-link" th:if="${keyword != null}"
+                                       th:href="@{'/searchByKeyword?keyword=' + ${keyword} + '&page=' + ${totalPages - 1}}">Last</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <!-- End Pagination -->
+
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <div th:replace="~{fragment::footer}"></div>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a th:replace="~{fragment::scroll}" class="scroll-to-top rounded" href="#page-top"></a>
+
+<!-- Logout Modal-->
+<div th:replace="~{fragment::layoutModal}"></div>
+
+<div th:replace="~{fragment::script}"></div>
+
+</body>
+
+</html>

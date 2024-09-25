@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.thymeleaf.org">
+
+<head th:replace="fragment :: header">
+
+
+    <title></title></head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <div th:replace="fragment::sidebar"></div>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <div th:replace="fragment::topbar"></div>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+
+                <!--Start search book-->
+                <div class="col-12 mb-5">
+                    <form th:action="@{/searchByKeyword}" style="display: flex;" method="post">
+                        <div class="col-11" style="flex-grow: 1; margin-right: 20px;">
+                            <input name="keyword" type="text" class="form-control" placeholder="Search by keyword...">
+                        </div>
+                        <div class="col-1">
+                            <button class="btn btn-outline-primary" type="submit" style="width: 100%;">Search</button>
+                        </div>
+                    </form>
+                </div>
+                <!--End search book-->
+
+                <h1 class="fs-5 text-center">List of Categories</h1>
+                <div th:if="${size < 0}">
+                    <p class="font-weight-bold">No book in shop</p>
+                </div>
+                <div class="container row">
+                    <table class="table col-md-12">
+                        <thead class="">
+                        <tr>
+                            <th class="scope">#</th>
+                            <th class="scope">Book ID</th>
+                            <th class="scope">Title</th>
+                            <th class="scope">Author</th>
+                            <th class="scope">Category</th>
+                            <th class="scope">Cost Price</th>
+                            <th class="scope">Current Quantity</th>
+                            <th class="scope">Image</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="book, count : ${books}">
+                            <td th:text="${count.count}"></td>
+                            <td th:text="${book.id}"></td>
+                            <td th:text="${book.title}"></td>
+                            <td th:text="${book.author}"></td>
+                            <td th:text="${book.category.name}"></td>
+                            <td th:text="${book.costPrice}"></td>
+                            <td th:text="${book.currentQuantity}"></td>
+                            <td>
+                                <img th:src="@{'data:image/jpeg;base64,' + ${book.image}}" alt="Book not image"
+                                     width="100">
+                            </td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Start Pagination -->
+                    <div class="d-flex justify-content-center">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                <!-- First Page -->
+                                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                    <a class="page-link"
+                                       th:if="${keyword == null }"
+                                       th:href="@{'/books?page=0'}">First</a>
+
+                                    <a class="page-link" th:if="${keyword != null}"
+                                       th:href="@{'/searchByKeyword?keyword=' + ${keyword} + '&page=0'}">First</a>
+                                </li>
+                                <!-- Previous Page -->
+                                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                    <a class="page-link"
+                                       th:if="${keyword == null }"
+                                       th:href="@{'/books?page=' + ${currentPage - 1}}">Previous</a>
+
+                                    <a class="page-link" th:if="${keyword != null}"
+                                       th:href="@{'/searchByKeyword?keyword=' + ${keyword} + '&page=' + ${currentPage - 1}}">Previous</a>
+                                </li>
+                                <!-- Page Numbers -->
+                                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                                    th:classappend="${i == currentPage} ? 'active'">
+                                    <a class="page-link"
+                                       th:if="${keyword == null }"
+                                       th:href="@{'/books?page=' + ${i}}" th:text="${i + 1}">1</a>
+
+                                    <a class="page-link" th:if="${keyword != null}"
+                                       th:href="@{'/searchByKeyword?keyword=' + ${keyword} + '&page=' + ${i}}"
+                                       th:text="${i + 1}">1</a>
+                                </li>
+                                <!-- Next Page -->
+                                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                                    <a class="page-link"
+                                       th:if="${keyword == null }"
+                                       th:href="@{'/books?page=' + ${currentPage + 1}}">Next</a>
+
+                                    <a class="page-link" th:if="${keyword != null}"
+                                       th:href="@{'/searchByKeyword?keyword=' + ${keyword} + '&page=' + ${currentPage + 1}}">Next</a>
+                                </li>
+                                <!-- Last Page -->
+                                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                                    <a class="page-link"
+                                       th:if="${keyword == null }"
+                                       th:href="@{'/books?page=' + ${totalPages - 1}}">Last</a>
+
+                                    <a class="page-link" th:if="${keyword != null}"
+                                       th:href="@{'/searchByKeyword?keyword=' + ${keyword} + '&page=' + ${totalPages - 1}}">Last</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <!-- End Pagination -->
+
+
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <div th:replace="fragment::footer"></div>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a th:replace="fragment::scroll" class="scroll-to-top rounded" href="#page-top">
+
+</a>
+
+<!-- Logout Modal-->
+<div th:replace="fragment::layoutModal"></div>
+
+<div th:replace="fragment::script"></div>
+
+</body>
+
+</html>

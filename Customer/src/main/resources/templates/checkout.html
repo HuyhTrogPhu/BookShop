@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragment::header}">
+    <title>Furni Free Bootstrap 5 Template for Furniture and Interior Design Websites by Untree.co</title>
+</head>
+
+<body>
+
+<!-- Start Header/Navigation -->
+<div th:replace="~{fragment::nav}"></div>
+<!-- End Header/Navigation -->
+
+<!-- Start Hero Section -->
+<div class="hero">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-lg-5">
+                <div class="intro-excerpt">
+                    <h1>Checkout</h1>
+                </div>
+            </div>
+            <div class="col-lg-7">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Hero Section -->
+
+<form th:action="@{/placeOrder}" method="post">
+    <div class="untree_co-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mb-5 mb-md-0">
+                    <h2 class="h3 mb-3 text-black">Billing Details</h2>
+                    <div class="p-3 p-lg-5 border bg-white">
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="country" class="text-black">Country <span class="text-danger">*</span></label>
+                                <select id="country" name="customerDto.country" th:field="*{customerDto.country}" class="form-control">
+                                    <option value="">Select a country</option>
+                                    <option th:each="country : ${countries}" th:value="${country.id}" th:text="${country.name}"></option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="city" class="text-black">City <span class="text-danger">*</span></label>
+                                <select id="city" name="customerDto.city" th:field="*{customerDto.city}" class="form-control">
+                                    <option value="">Select a city</option>
+                                    <option th:each="city : ${cities}" th:value="${city.id}" th:text="${city.name}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="firstName" class="text-black">First Name <span class="text-danger">*</span></label>
+                                <input th:value="${firstName}" readonly type="text" class="form-control" id="firstName" name="customerDto.firstName">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="lastName" class="text-black">Last Name <span class="text-danger">*</span></label>
+                                <input th:value="${lastName}" readonly type="text" class="form-control" id="lastName" name="customerDto.lastName">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <label for="address" class="text-black">Address <span class="text-danger">*</span></label>
+                                <input th:field="*{customerDto.address}" name="customerDto.address" type="text" class="form-control" id="address" placeholder="Street address">
+                            </div>
+                        </div>
+                        <div class="form-group row mb-5">
+                            <div class="col-md-6">
+                                <label for="email" class="text-black">Email Address <span class="text-danger">*</span></label>
+                                <input th:value="${Email}" name="customerDto.username" readonly type="text" class="form-control" id="email">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="phone" class="text-black">Phone <span class="text-danger">*</span></label>
+                                <input th:field="*{customerDto.phoneNumber}" name="customerDto.phoneNumber" type="text" class="form-control" id="phone" placeholder="Phone Number">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="orderNotes" class="text-black">Order Notes</label>
+                            <textarea th:field="*{orderDto.orderStatus}" name="orderDto.orderStatus" id="orderNotes" cols="30" rows="5" class="form-control" placeholder="Write your notes here..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row mb-5">
+                        <div class="col-md-12">
+                            <h2 class="h3 mb-3 text-black">Your Order</h2>
+                            <div class="p-3 p-lg-5 border bg-white">
+                                <table class="table site-block-order-table mb-5" th:object="${shoppingCart}">
+                                    <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Total</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="item : ${shoppingCart.cartItems}">
+                                        <td th:text="${item.book.title} + ' X ' + ${item.quantity}"></td>
+                                        <td th:text="${item.unitPrice * item.quantity} + '$'"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-black font-weight-bold"><strong>Cart Subtotal</strong></td>
+                                        <td class="text-black" th:text="${shoppingCart.totalPrice} + '$'"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-black font-weight-bold"><strong>Tax</strong></td>
+                                        <td class="text-black font-weight-bold"><strong>2%</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-black font-weight-bold"><strong>Order Total</strong></td>
+                                        <td class="text-black font-weight-bold"><strong th:text="${shoppingCart.totalPrice * 1.02} + '$'"></strong></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <h2 class="h6 mb-0 mb-4 text-black">Payment method:</h2>
+
+                                <div class="border p-3 mb-3">
+                                    <div class="form-group">
+                                        <label>
+                                            <input type="radio" th:field="*{orderDto.paymentMethod}" value="COD"> CoD
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="border p-3 mb-3">
+                                    <div class="form-group">
+                                        <label>
+                                            <input type="radio" th:field="*{orderDto.paymentMethod}" value="Paypal"> Paypal
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-black btn-lg py-3 btn-block">Place Order</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- Start Footer Section -->
+<div th:replace="~{fragment::footer}"></div>
+<!-- End Footer Section -->
+
+<div th:replace="~{fragment::script}"></div>
+</body>
+</html>
